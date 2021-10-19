@@ -36,6 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'polls',
+    #注册子应用
+    #子应用名.apps.子应用名首字母大写Config，或者直接写应用名称就可以
+    #'interfaces.apps.InterfacesConfig'
+    'interfaces',
 ]
 
 MIDDLEWARE = [
