@@ -10,5 +10,5 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('index1', views.indexView.as_view()),
-    path('<int:pk>/x', views.indexView.as_view()),
+    # path('<int:pk>/x', views.indexView.as_view()),
 ]

@@ -27,3 +27,7 @@ class Interfaces(models.Model):
         # 复数样式，一般和verbose_name保持一致，不然会看到 名称为项目s
         verbose_name_plural = '接口'
 
+    # 在打印该模型类对象的时候，可以展示名称
+    def __str__(self):
+        return self.name
+

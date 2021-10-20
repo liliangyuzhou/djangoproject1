@@ -4,11 +4,12 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.views import View
+from .models import Project
 
 
 def index(request):
     if request.method=="GET":
-        return HttpResponse("Hello, GET")
+        return HttpResponse("Hello, GET1")
     elif request.method=="POST":
         return HttpResponse("Hello, POST")
     else:
@@ -36,7 +37,22 @@ class indexView(View):
     #     ]
     #     return render(request,'index.html',locals())
 
-    def get(self,request,pk):
+    # def get(self,request,pk):
+    #     return HttpResponse("Hello, GET")
+
+    def get(self,request):
+        #创建数据
+        # #方法一
+        # #创建模型类对象
+        # ob=Project(name="使用类创建的项目",tester="test",developer="test",leader="test"
+        #         ,publish_app="test")
+        # #调用save（）保存
+        # ob.save()
+
+        #方法二
+        Project.objects.create(name="使用objects()创建的项目",tester="test",developer="test",leader="test"
+                ,publish_app="test")
+
         return HttpResponse("Hello, GET")
 
     def post(self,request):
