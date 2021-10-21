@@ -4,7 +4,7 @@ from django.db import models
 #一个项目有多个接口，那么要在"多的一侧"创建外健
 class Interfaces(models.Model):
     name = models.CharField(verbose_name="接口名称", max_length=30, unique=True,
-                            help_text="项目名称"),
+                            help_text="接口名称",null=True)
     tester = models.CharField(verbose_name="测试人员", max_length=30)
     desc = models.TextField(verbose_name="描述", help_text="紧要描述", blank=True,
                             default="", null=True)
@@ -28,6 +28,6 @@ class Interfaces(models.Model):
         verbose_name_plural = '接口'
 
     # 在打印该模型类对象的时候，可以展示名称
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
