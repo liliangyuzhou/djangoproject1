@@ -22,4 +22,5 @@ urlpatterns = [
     # path('', views.index,name='index'),
     path('polls/', include('polls.urls')),
     path('interfaces/', include('interfaces.urls')),
+    path('projects/', include('projects.urls')),
 ]
