@@ -4,7 +4,8 @@ from polls.models import Project
 # Create your views here.
 from django.views import View
 import json
-
+from .serializer import ProjectModelSerializer
+from rest_framework.viewsets import ModelViewSet
 
 class ProjectList(View):
 
@@ -118,3 +119,9 @@ class ProjectDetail(View):
         obj2.delete()
 
         return JsonResponse(None,safe=False,status=204)
+
+
+class ProjectViewSet(ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectModelSerializer
+

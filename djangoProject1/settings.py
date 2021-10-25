@@ -35,12 +35,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'polls',
     #注册子应用
     #子应用名.apps.子应用名首字母大写Config，或者直接写应用名称就可以
     #'interfaces.apps.InterfacesConfig'
     'interfaces',
     'projects',
+
 ]
 
 MIDDLEWARE = [
