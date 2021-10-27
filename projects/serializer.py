@@ -36,9 +36,9 @@ class ProjectSerializer(serializers.Serializer):
     id=serializers.IntegerField(label='ID',read_only=True)
     #write_only=True,指定该字段只能进行反序列化输入，而不能进行反序列化输出
     name = serializers.CharField(label="项目名称", max_length=30,
-                            help_text="项目名称",write_only=True,
-                                 validators=[UniqueValidator(queryset=Project.objects.all(),
-                                                             message="名称不能重复"),is_unqiue_project_name])
+                                 help_text="项目名称", write_only=True,
+                                 validators=[UniqueValidator(queryset=Project.objects.all(), message="名称不能重复"),is_unqiue_project_name])
+
     leader = serializers.CharField(label="负责人", max_length=50,
                               help_text="负责人")
     tester = serializers.CharField(label="测试人员", max_length=30,
@@ -51,5 +51,24 @@ class ProjectSerializer(serializers.Serializer):
     desc = serializers.CharField(label="描述",
                                  help_text="紧要描述",allow_null=True,
                                  allow_blank=True,default="")
+
+    # 单字段校验
+    #必须validate开头_后面是要校验字段的名称，value是前端传进来的值
+    def validate_name(self,value):
+        #要求name必须以项目2个字结尾
+        if not value.endswith("项目"):
+            raise serializers.ValidationError("项目名称中必须以项目关键字结尾")
+        # 这里注意一定要返回这个value，不然，序列化后的值这个字段的值为空
+        return value
+
+    #多字段校验，名称只能是validate。attrs是一个列表
+    def validate(self,attrs):
+        """如果test不同时是项目负责人和测试负责人，抛出错误"""
+        if 'test'  in attrs['tester'] and 'test'  in attrs['leader']:
+            raise serializers.ValidationError("test必须不同时是项目负责人和测试负责人")
+        return attrs
+
+
+
 
 
