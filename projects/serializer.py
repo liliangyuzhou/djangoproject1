@@ -20,6 +20,12 @@ from rest_framework.validators import UniqueValidator
 from polls.models import Project
 
 
+#创建自定义序列化器中的校验器
+#第一个参数为字段的值
+def is_unqiue_project_name(name):
+    if "项目" not in name:
+        raise serializers.ValidationError("项目名称中必须包含项目关键字")
+
 
 class ProjectSerializer(serializers.Serializer):
     """创建序列化器类"""
@@ -32,7 +38,7 @@ class ProjectSerializer(serializers.Serializer):
     name = serializers.CharField(label="项目名称", max_length=30,
                             help_text="项目名称",write_only=True,
                                  validators=[UniqueValidator(queryset=Project.objects.all(),
-                                                             message="名称不能重复")])
+                                                             message="名称不能重复"),is_unqiue_project_name])
     leader = serializers.CharField(label="负责人", max_length=50,
                               help_text="负责人")
     tester = serializers.CharField(label="测试人员", max_length=30,
