@@ -178,7 +178,7 @@ class ProjectDetail(View):
         """更新某个项目"""
         # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
         # 2.获取到数据库中该id查询的结果对象
-        obj2 = self.get_object(pk)
+        obj2 = self.get_object(pk=pk)
         # print(obj2.name,type(obj2.name))
         # 3.从前端获取json格式的数据
         json_data = request.body.decode('utf-8')
@@ -196,11 +196,11 @@ class ProjectDetail(View):
             return JsonResponse(ser.errors)
 
         # 更新项目
-        obj2.name = ser.validated_data['name'],
-        obj2.leader = ser.validated_data['leader'],
-        obj2.tester = ser.validated_data['tester'],
-        obj2.developer = ser.validated_data['developer'],
-        obj2.desc = ser.validated_data['desc'],
+        obj2.name = ser.validated_data['name']
+        obj2.leader = ser.validated_data['leader']
+        obj2.tester = ser.validated_data['tester']
+        obj2.developer = ser.validated_data['developer']
+        obj2.desc = ser.validated_data['desc']
         obj2.publish_app = ser.validated_data['publish_app']
         obj2.save()
         print(type(obj2.name))
