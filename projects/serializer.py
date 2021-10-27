@@ -16,6 +16,11 @@
 #创建序列化器
 #1.继承Serializer或者其的子类
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
+from polls.models import Project
+
+
+
 class ProjectSerializer(serializers.Serializer):
     """创建序列化器类"""
     #label：别名相当于verbose_name，help_text：帮助信息
@@ -25,7 +30,9 @@ class ProjectSerializer(serializers.Serializer):
     id=serializers.IntegerField(label='ID',read_only=True)
     #write_only=True,指定该字段只能进行反序列化输入，而不能进行反序列化输出
     name = serializers.CharField(label="项目名称", max_length=30,
-                            help_text="项目名称",write_only=True)
+                            help_text="项目名称",write_only=True,
+                                 validators=[UniqueValidator(queryset=Project.objects.all(),
+                                                             message="名称不能重复")])
     leader = serializers.CharField(label="负责人", max_length=50,
                               help_text="负责人")
     tester = serializers.CharField(label="测试人员", max_length=30,
@@ -36,6 +43,7 @@ class ProjectSerializer(serializers.Serializer):
                                    help_text="发布应用")
     #allow_null=True,allow_blank=True对应数据库模型类里面的null和blank
     desc = serializers.CharField(label="描述",
-                                 help_text="紧要描述",allow_null=True,allow_blank=True,default="")
+                                 help_text="紧要描述",allow_null=True,
+                                 allow_blank=True,default="")
 
 
