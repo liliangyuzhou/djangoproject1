@@ -69,6 +69,23 @@ class ProjectSerializer(serializers.Serializer):
         return attrs
 
 
+    def create(self, validated_data):
+        """把对应的视图函数中create进行数据库操作的逻辑放到这里就可以"""
+        #这里注意使用这种解包的操作，如果在视图函数的save（）方法中传参数，要将这个参数移除后再解包，不然
+        #多了数据库里面没有的字段，会报错误。或者，可以使用validated_data["key"]=value来写
+        obj = Project.objects.create(**validated_data)
+        #一定记得把创建成功的数据库模型类对象返回
+        return obj
 
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data['name']
+        instance.leader = validated_data['leader']
+        instance.tester = validated_data['tester']
+        instance.developer = validated_data['developer']
+        instance.desc = validated_data['desc']
+        instance.publish_app =validated_data['publish_app']
+        instance.save()
+        return instance
 
 

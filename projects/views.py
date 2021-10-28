@@ -60,8 +60,13 @@ class ProjectList(View):
 
         # obj = Project.objects.create(**python_data)
         # 校验成功后的数据使用ser.validated_data
-        obj = Project.objects.create(**ser.validated_data)
+        # obj = Project.objects.create(**ser.validated_data)
 
+        #1。在序列化器中调用了create（）方法，要在试图函数中使用序列化器对象调用save（）方法
+        #2。如果在创建序列化器对象的时候，只给data传参，那么调用save（）方法，实际是调用的序列化器的create（）方法
+        #3。如果给save（）传递关键字参数，实际上是放到了validated_data里面，key值相同就是覆盖，不同的就是添加
+        # ser.save(user="李亮")
+        ser.save()
         # 3.将模型类对象转化为字典，然后返回(一般restful风格的接口都要求有返回）
 
         # one_project = {
@@ -73,8 +78,8 @@ class ProjectList(View):
         #     "desc": obj.desc
         # }
         # return JsonResponse(one_project,status=201)
-
-        ser=serializer.ProjectSerializer(obj)
+        ##### 这里写错了，只需要一个序列化器对象，之前是分开写序列化输出，和序列化输入的
+        ##### ser=serializer.ProjectSerializer(obj)
         return JsonResponse(ser.data)
 
 
@@ -186,7 +191,7 @@ class ProjectDetail(View):
         # print(python_data)
         # print(python_data['name'])
         # print(obj2.name)
-        ser=serializer.ProjectSerializer(data=python_data)
+        ser=serializer.ProjectSerializer(instance=obj2,data=python_data)
         # 校验前端输入的数据
         try:
             ser.is_valid(raise_exception=True)
@@ -196,14 +201,18 @@ class ProjectDetail(View):
             return JsonResponse(ser.errors)
 
         # 更新项目
-        obj2.name = ser.validated_data['name']
-        obj2.leader = ser.validated_data['leader']
-        obj2.tester = ser.validated_data['tester']
-        obj2.developer = ser.validated_data['developer']
-        obj2.desc = ser.validated_data['desc']
-        obj2.publish_app = ser.validated_data['publish_app']
-        obj2.save()
-        print(type(obj2.name))
+        #序列化器对象ser直接调用save()方法，调用的是序列化器的create方法，并且列化器只需要传递data属性
+        #要使用save方法调用update方法，要给序列化器同时传递instance属性和data属性
+        ser.save()
+        # obj2.name = ser.validated_data['name']
+        # obj2.leader = ser.validated_data['leader']
+        # obj2.tester = ser.validated_data['tester']
+        # obj2.developer = ser.validated_data['developer']
+        # obj2.desc = ser.validated_data['desc']
+        # obj2.publish_app = ser.validated_data['publish_app']
+        # obj2.save()
+        # print(type(obj2.name))
+
         # 将更新后的项目转化为字典
         # one_project = {
         #     "name": obj2.name,
@@ -216,7 +225,7 @@ class ProjectDetail(View):
 
         # print(one_project)
         # return JsonResponse(one_project,status=201)
-        ser=serializer.ProjectSerializer(instance=obj2)
+        # ser=serializer.ProjectSerializer(instance=obj2)
         return JsonResponse(ser.data,status=201)
 
 
