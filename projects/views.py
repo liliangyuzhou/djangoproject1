@@ -26,7 +26,7 @@ class ProjectList(View):
         #     }
         #     project_list.append(one_project)
         # return JsonResponse(project_list, safe=False)
-        ser=serializer.ProjectSerializer(instance=obj_list,many=True)
+        ser=serializer.ProjectModelSerializer(instance=obj_list,many=True)
         return JsonResponse(ser.data,safe=False)
         # return HttpResponse("Hello, GET")
 
@@ -38,14 +38,14 @@ class ProjectList(View):
         json_data = request.body.decode('utf-8')
         python_data = json.loads(json_data)
 
-        ser=serializer.ProjectSerializer(data=python_data)
+        ser=serializer.ProjectModelSerializer(data=python_data)
         #校验前端输入的数据
         try:
             ser.is_valid(raise_exception=True)
-        except Exception as e:
+        except Exception:
             # 只有在调用is_valid(raise_exception=True)
             # 方法之后，才可以调用errors属性，获取校验的错误提示
-           return JsonResponse(ser.errors)
+            return JsonResponse(ser.errors)
 
         # 2.向数据库中新增项目
         # obj=Project.objects.create(name=python_data['name'],
@@ -168,7 +168,7 @@ class ProjectDetail(View):
         # }
         #1.通过模型类对象（或者查询集），传给instance参数，可以进行序列化操作
         #2.通过序列化器ProjectSerializer对象的data属性，就可以获得转化之后的字典
-        ser=serializer.ProjectSerializer(instance=obj1)
+        ser=serializer.ProjectModelSerializer(instance=obj1)
         return JsonResponse(ser.data)
 
     def get_object(self, pk):
@@ -191,7 +191,7 @@ class ProjectDetail(View):
         # print(python_data)
         # print(python_data['name'])
         # print(obj2.name)
-        ser=serializer.ProjectSerializer(instance=obj2,data=python_data)
+        ser=serializer.ProjectModelSerializer(instance=obj2,data=python_data)
         # 校验前端输入的数据
         try:
             ser.is_valid(raise_exception=True)
