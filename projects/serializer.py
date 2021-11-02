@@ -95,13 +95,16 @@ class ProjectModelSerializer(serializers.ModelSerializer):
                                  help_text="项目名称", write_only=True,
                                  validators=[UniqueValidator(queryset=Project.objects.all(), message="名称不能重复"),
                                              is_unqiue_project_name])
+    #ModelSerializer直接指定父表，那么模型序列化器从表的字段不会自动被生成校验
+    # 如果从表外健指定了related_name="interfaces"，使用interfaces，没有的话字段名称使用全小写的从表名_set,固定写法
+    # interfaces=serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         # 1.指定参考哪一个模型类来创建
         model=Project
         #指定为模型类的那些字段，来生成序列化器
         # fields="__all__"
         #指定特定的字段，可以放在元组里面
-        fields =('id','name','leader','developer','tester')
+        fields =('id','name','leader','developer','tester' ,'interfaces')
         #指定不需要序列化的字段,这个和上面指定特定字段 fields =('id','name','leader','developer','tester')等价
         # exclude=('desc','publish_app')
 

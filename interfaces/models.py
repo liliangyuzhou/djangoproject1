@@ -16,7 +16,7 @@ class Interfaces(models.Model):
         #SET_DEFAULT--》父表被删除后，字表该条数据可以设置默认值，同时要指定默认值，null=True
 
     project=models.ForeignKey('polls.Project',on_delete=models.CASCADE,
-                              verbose_name="所属项目",help_text="所属项目",)
+                              verbose_name="所属项目",help_text="所属项目",related_name="interfaces")
 
     # 定义子类Meta，名称是固定的，用于设置当前数据模型的元数据信息
     class Meta:
