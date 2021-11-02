@@ -18,6 +18,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from polls.models import Project
+from interfaces.serializer import InterfacesModelSerializer
 
 
 # 创建自定义序列化器中的校验器
@@ -95,16 +96,31 @@ class ProjectModelSerializer(serializers.ModelSerializer):
                                  help_text="项目名称", write_only=True,
                                  validators=[UniqueValidator(queryset=Project.objects.all(), message="名称不能重复"),
                                              is_unqiue_project_name])
+    #在父表序列化器中定义从表的关联字段（一对多）
     #ModelSerializer直接指定父表，那么模型序列化器从表的字段不会自动被生成校验
     # 如果从表外健指定了related_name="interfaces"，使用interfaces，没有的话字段名称使用全小写的从表名_set,固定写法
-    # interfaces=serializers.PrimaryKeyRelatedField(read_only=True)
+    # many=True,一对多一定要写many=True，此时PrimaryKeyRelatedField类型返回值是id列表
+    # interfaces=serializers.PrimaryKeyRelatedField(read_only=True,many=True)
+    # interfaces_set = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+
+    #如果要不要展示接口的的id列表，而是名称.并且只要输出结果有多个，一定要加many=True
+    # interfaces_set = serializers.StringRelatedField(many=True)
+
+    #如果该字段要指定从表某个字段，使用SlugRelatedField
+    # interfaces_set = serializers.SlugRelatedField(slug_field="tester",many=True,read_only=True)
+
+    #我们还可以拿到从表的序列化器类，作为一个父表的一个字段，因为继承关系,都是继承自filed
+    interfaces_set=InterfacesModelSerializer(label="所属接口的信息",many=True)
+
     class Meta:
         # 1.指定参考哪一个模型类来创建
         model=Project
         #指定为模型类的那些字段，来生成序列化器
         # fields="__all__"
         #指定特定的字段，可以放在元组里面
-        fields =('id','name','leader','developer','tester' ,'interfaces')
+        # fields =('id','name','leader','developer','tester' ,'interfaces')
+        # fields = ('id', 'name', 'leader', 'developer', 'tester', 'interfaces_set')
+        fields = ('id', 'name', 'leader', 'developer', 'tester', 'interfaces_set')
         #指定不需要序列化的字段,这个和上面指定特定字段 fields =('id','name','leader','developer','tester')等价
         # exclude=('desc','publish_app')
 
