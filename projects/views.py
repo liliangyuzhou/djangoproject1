@@ -169,7 +169,8 @@ class ProjectDetail(View):
         #1.通过模型类对象（或者查询集），传给instance参数，可以进行序列化操作
         #2.通过序列化器ProjectSerializer对象的data属性，就可以获得转化之后的字典
         ser=serializer.ProjectModelSerializer(instance=obj1)
-        return JsonResponse(ser.data)
+        #加入json_dumps_params={"ensure_ascii":False}可以调用接口在浏览器上，展示中文
+        return JsonResponse(ser.data,json_dumps_params={"ensure_ascii":False})
 
     def get_object(self, pk):
         try:
