@@ -101,7 +101,7 @@ class ProjectModelSerializer(serializers.ModelSerializer):
     # 如果从表外健指定了related_name="interfaces"，使用interfaces，没有的话字段名称使用全小写的从表名_set,固定写法
     # many=True,一对多一定要写many=True，此时PrimaryKeyRelatedField类型返回值是id列表
     # interfaces=serializers.PrimaryKeyRelatedField(read_only=True,many=True)
-    # interfaces_set = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    interfaces_set = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
 
     #如果要不要展示接口的的id列表，而是名称.并且只要输出结果有多个，一定要加many=True
     # interfaces_set = serializers.StringRelatedField(many=True)
@@ -110,7 +110,7 @@ class ProjectModelSerializer(serializers.ModelSerializer):
     # interfaces_set = serializers.SlugRelatedField(slug_field="tester",many=True,read_only=True)
 
     #我们还可以拿到从表的序列化器类，作为一个父表的一个字段，因为继承关系,都是继承自filed
-    interfaces_set=InterfacesModelSerializer(label="所属接口的信息",many=True)
+    # interfaces_set=InterfacesModelSerializer(label="所属接口的信息",many=True)
 
     class Meta:
         # 1.指定参考哪一个模型类来创建

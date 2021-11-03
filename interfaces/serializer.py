@@ -18,6 +18,10 @@ class InterfacesModelSerializer(serializers.ModelSerializer):
     # 的外健id值
     #如果只要输出的话，就写read_only=True
     # project=serializers.PrimaryKeyRelatedField(read_only=True)
+
+    # #注：创建时候报错需要project_id替换project
+    # project_id=serializers.PrimaryKeyRelatedField(read_only=True)
+
     #2.如果不想输出项目id，而是项目名称，要使用另外一种类型StringRelatedField（）,该类型源码可以看到只能进行序列化输出
     # 会自动调用Project的__str__方法，可以打断点查看
     # project=serializers.StringRelatedField(label="所属项目名称")
@@ -27,7 +31,7 @@ class InterfacesModelSerializer(serializers.ModelSerializer):
     #只需要输出就写read_only=True
     # project=serializers.SlugRelatedField(slug_field="tester",read_only=True)
     #即需要序列化输出，也需要反序列化输入，那么就要写queryset参数
-    project=serializers.SlugRelatedField(slug_field="tester",queryset=Project.objects.all())
+    # project=serializers.SlugRelatedField(slug_field="tester",queryset=Project.objects.all())
 
 
     class Meta:
