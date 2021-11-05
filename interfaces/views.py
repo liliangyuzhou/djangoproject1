@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from rest_framework.views import APIView
+
 from .serializer import InterfacesModelSerializer
 from django.views import View
 from django.http import JsonResponse, Http404
@@ -6,7 +8,7 @@ from .models import Interfaces
 import json
 # Create your views here.
 
-class InterfaceDetail(View):
+class InterfaceDetail(APIView):
 
     def get_object(self, pk):
         try:
@@ -22,7 +24,7 @@ class InterfaceDetail(View):
         return JsonResponse(ser.data,json_dumps_params={"ensure_ascii":False})
 
 
-class InterfacesList(View):
+class InterfacesList(APIView):
 
     def get(self, request):
         # 1.从数据库中获取所有的项目信息

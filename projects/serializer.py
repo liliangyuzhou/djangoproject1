@@ -134,20 +134,20 @@ class ProjectModelSerializer(serializers.ModelSerializer):
                 }
             }
         }
-    # 单字段校验
-    # 必须validate开头_后面是要校验字段的名称，value是前端传进来的值
-    def validate_name(self, value):
-        # 要求name必须以项目2个字结尾
-        if not value.endswith("项目"):
-            raise serializers.ValidationError("项目名称中必须以项目关键字结尾")
-        # 这里注意一定要返回这个value，不然，序列化后的值这个字段的值为空
-        return value
-
-    # 多字段校验，名称只能是validate。attrs是一个列表
-    def validate(self, attrs):
-        """如果test不同时是项目负责人和测试负责人，抛出错误"""
-        if 'test' in attrs['tester'] and 'test' in attrs['leader']:
-            raise serializers.ValidationError("test必须不同时是项目负责人和测试负责人")
-        return attrs
-
-    #自动创建create和update，但是可以覆盖写
+    # # 单字段校验
+    # # 必须validate开头_后面是要校验字段的名称，value是前端传进来的值
+    # def validate_name(self, value):
+    #     # 要求name必须以项目2个字结尾
+    #     if not value.endswith("项目"):
+    #         raise serializers.ValidationError("项目名称中必须以项目关键字结尾")
+    #     # 这里注意一定要返回这个value，不然，序列化后的值这个字段的值为空
+    #     return value
+    #
+    # # 多字段校验，名称只能是validate。attrs是一个列表
+    # def validate(self, attrs):
+    #     """如果test不同时是项目负责人和测试负责人，抛出错误"""
+    #     if 'test' in attrs['tester'] and 'test' in attrs['leader']:
+    #         raise serializers.ValidationError("test必须不同时是项目负责人和测试负责人")
+    #     return attrs
+    #
+    # #自动创建create和update，但是可以覆盖写

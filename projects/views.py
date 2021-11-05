@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, Http404
+from rest_framework.views import APIView
+
 from polls.models import Project
 # Create your views here.
 from django.views import View
@@ -8,7 +10,7 @@ import json
 from projects import serializer
 from rest_framework.viewsets import ModelViewSet
 
-class ProjectList(View):
+class ProjectList(APIView):
 
     def get(self, request):
         # 1.从数据库中获取所有的项目信息
@@ -150,7 +152,7 @@ class ProjectList(View):
 #     serializer_class = ProjectModelSerializer
 
 
-class ProjectDetail(View):
+class ProjectDetail(APIView):
     def get(self, request, pk):
         """获取数据详情"""
         # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
