@@ -37,10 +37,10 @@ class ProjectList(APIView):
         # 1. 从前端获取json格式的数据，转换为python中的类型
         # 为了严谨性，这里需要做各种复杂的校验
         # 比如：是否是json，传递的项目数据是否符合要求，有些必传参数是否携带
-        json_data = request.body.decode('utf-8')
-        python_data = json.loads(json_data)
-
-        ser=serializer.ProjectModelSerializer(data=python_data)
+        # json_data = request.body.decode('utf-8')
+        # python_data = json.loads(json_data)
+        # ser=serializer.ProjectModelSerializer(data=python_data)
+        ser = serializer.ProjectModelSerializer(data=request.data)
         #校验前端输入的数据
         try:
             ser.is_valid(raise_exception=True)
