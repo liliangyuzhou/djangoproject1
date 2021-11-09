@@ -14,9 +14,13 @@ from rest_framework.viewsets import ModelViewSet
 
 class ProjectList(APIView):
 
+    queryset=Project.objects.all()
+    serializer_class=serializer.ProjectModelSerializer
+
     def get(self, request):
         # 1.从数据库中获取所有的项目信息
-        obj_list = Project.objects.all()
+        # obj_list = Project.objects.all()
+        obj_list = self.queryset
 
         # # 将数据库模型实例转化为字典类型（嵌套字典的列表）
         # project_list = []
@@ -30,7 +34,9 @@ class ProjectList(APIView):
         #     }
         #     project_list.append(one_project)
         # return JsonResponse(project_list, safe=False)
-        ser=serializer.ProjectModelSerializer(instance=obj_list,many=True)
+        # ser=serializer.ProjectModelSerializer(instance=obj_list,many=True)
+        ser=self.serializer_class(instance=obj_list,many=True)
+
         # return JsonResponse(ser.data,safe=False)
         # return HttpResponse("Hello, GET")
         return Response(ser.data,status=status.HTTP_200_OK)
@@ -43,7 +49,8 @@ class ProjectList(APIView):
         # json_data = request.body.decode('utf-8')
         # python_data = json.loads(json_data)
         # ser=serializer.ProjectModelSerializer(data=python_data)
-        ser = serializer.ProjectModelSerializer(data=request.data)
+        # ser = serializer.ProjectModelSerializer(data=request.data)
+        ser = self.serializer_class(data=request.data)
         #校验前端输入的数据
         # try:
         #     ser.is_valid(raise_exception=True)
@@ -164,6 +171,8 @@ class ProjectList(APIView):
 
 
 class ProjectDetail(APIView):
+    queryset = Project.objects.all()
+    serializer_class = serializer.ProjectModelSerializer
     def get(self, request, pk):
         """获取数据详情"""
         # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
@@ -181,14 +190,15 @@ class ProjectDetail(APIView):
         # }
         #1.通过模型类对象（或者查询集），传给instance参数，可以进行序列化操作
         #2.通过序列化器ProjectSerializer对象的data属性，就可以获得转化之后的字典
-        ser=serializer.ProjectModelSerializer(instance=obj1)
+        ser=self.serializer_class(instance=obj1)
         #加入json_dumps_params={"ensure_ascii":False}可以调用接口在浏览器上，展示中文
         # return JsonResponse(ser.data,json_dumps_params={"ensure_ascii":False})
         return Response(ser.data,status=status.HTTP_200_OK)
 
     def get_object(self, pk):
         try:
-            obj1 = Project.objects.get(id=pk)
+            # obj1 = Project.objects.get(id=pk)
+            obj1 = self.queryset.get(id=pk)
         except Project.DoesNotExist:
             # 不存在，可以抛出一个404的异常，这个异常是django自带的
             raise Http404
@@ -207,14 +217,19 @@ class ProjectDetail(APIView):
         # print(python_data['name'])
         # print(obj2.name)
         # ser=serializer.ProjectModelSerializer(instance=obj2,data=python_data)
-        ser = serializer.ProjectModelSerializer(instance=obj2, data=request.data)
+        # ser = serializer.ProjectModelSerializer(instance=obj2, data=request.data)
+        ser = self.serializer_class(instance=obj2, data=request.data)
+
+        #使用的apiview后不需要我们主动捕获异常，会自动处理
+        ser.is_valid(raise_exception=True)
+
         # 校验前端输入的数据
-        try:
-            ser.is_valid(raise_exception=True)
-        except Exception as e:
-            # 只有在调用is_valid(raise_exception=True)
-            # 方法之后，才可以调用errors属性，获取校验的错误提示
-            return JsonResponse(ser.errors)
+        # try:
+        #     ser.is_valid(raise_exception=True)
+        # except Exception as e:
+        #     # 只有在调用is_valid(raise_exception=True)
+        #     # 方法之后，才可以调用errors属性，获取校验的错误提示
+        #     return JsonResponse(ser.errors)
 
         # 更新项目
         #序列化器对象ser直接调用save()方法，调用的是序列化器的create方法，并且列化器只需要传递data属性
