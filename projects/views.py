@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, Http404
 from rest_framework.views import APIView
+#继承APIView，给查询列表提供排序，过滤，分页
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -12,15 +14,21 @@ import json
 from projects import serializer
 from rest_framework.viewsets import ModelViewSet
 
-class ProjectList(APIView):
-
+class ProjectList(GenericAPIView):
+    # GenericAPIView是APIView的子类，具有APIView的所有功能
+    #使用GenericAPIView必须要指定queryset和serializer_class两个类属性
+    #queryset是当前类视图函数所需要的查询集
+    #serializer_class是对应的序列化器
     queryset=Project.objects.all()
     serializer_class=serializer.ProjectModelSerializer
 
     def get(self, request):
         # 1.从数据库中获取所有的项目信息
         # obj_list = Project.objects.all()
-        obj_list = self.queryset
+        # obj_list = self.queryset
+        #GenericAPIView不要直接使用queryset属性来获取查询集
+        #需要使用self.get_queryset()来获取查询集，因为更加灵活，后面可以重写父类的get_queryset()
+        obj_list = self.get_queryset()
 
         # # 将数据库模型实例转化为字典类型（嵌套字典的列表）
         # project_list = []
@@ -35,7 +43,12 @@ class ProjectList(APIView):
         #     project_list.append(one_project)
         # return JsonResponse(project_list, safe=False)
         # ser=serializer.ProjectModelSerializer(instance=obj_list,many=True)
-        ser=self.serializer_class(instance=obj_list,many=True)
+
+        #同样的GenericAPIView中不要直接通过类属性serializer_class来获取序列化器
+        #使用self.get_serializer来获取序列化器
+        # ser=self.serializer_class(instance=obj_list,many=True)
+        ser=self.get_serializer(instance=obj_list,many=True)
+
 
         # return JsonResponse(ser.data,safe=False)
         # return HttpResponse("Hello, GET")
@@ -50,7 +63,8 @@ class ProjectList(APIView):
         # python_data = json.loads(json_data)
         # ser=serializer.ProjectModelSerializer(data=python_data)
         # ser = serializer.ProjectModelSerializer(data=request.data)
-        ser = self.serializer_class(data=request.data)
+        # ser = self.serializer_class(data=request.data)
+        ser = self.get_serializer(data=request.data)
         #校验前端输入的数据
         # try:
         #     ser.is_valid(raise_exception=True)
@@ -170,7 +184,7 @@ class ProjectList(APIView):
 #     serializer_class = ProjectModelSerializer
 
 
-class ProjectDetail(APIView):
+class ProjectDetail(GenericAPIView):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
     def get(self, request, pk):
@@ -190,7 +204,9 @@ class ProjectDetail(APIView):
         # }
         #1.通过模型类对象（或者查询集），传给instance参数，可以进行序列化操作
         #2.通过序列化器ProjectSerializer对象的data属性，就可以获得转化之后的字典
-        ser=self.serializer_class(instance=obj1)
+        # ser=self.serializer_class(instance=obj1)
+        ser=self.get_serializer(instance=obj1)
+
         #加入json_dumps_params={"ensure_ascii":False}可以调用接口在浏览器上，展示中文
         # return JsonResponse(ser.data,json_dumps_params={"ensure_ascii":False})
         return Response(ser.data,status=status.HTTP_200_OK)
@@ -218,7 +234,8 @@ class ProjectDetail(APIView):
         # print(obj2.name)
         # ser=serializer.ProjectModelSerializer(instance=obj2,data=python_data)
         # ser = serializer.ProjectModelSerializer(instance=obj2, data=request.data)
-        ser = self.serializer_class(instance=obj2, data=request.data)
+        # ser = self.serializer_class(instance=obj2, data=request.data)
+        ser = self.get_serializer(instance=obj2, data=request.data)
 
         #使用的apiview后不需要我们主动捕获异常，会自动处理
         ser.is_valid(raise_exception=True)
