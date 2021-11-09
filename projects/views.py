@@ -192,7 +192,9 @@ class ProjectDetail(GenericAPIView):
         # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
 
         # 2.获取到数据库中该id查询的结果对象
-        obj1 = self.get_object(pk)
+        # obj1 = self.get_object(pk)
+        #使用GenericAPIView中的self.get_object()来获取单个模型对象，就不要我们使用自己自定义的get_object()
+        obj1=self.get_object()
         # 3.将获取到的模型类对象转化为字典，返回
         # one_project = {
         #     "name": obj1.name,
@@ -211,20 +213,22 @@ class ProjectDetail(GenericAPIView):
         # return JsonResponse(ser.data,json_dumps_params={"ensure_ascii":False})
         return Response(ser.data,status=status.HTTP_200_OK)
 
-    def get_object(self, pk):
-        try:
-            # obj1 = Project.objects.get(id=pk)
-            obj1 = self.queryset.get(id=pk)
-        except Project.DoesNotExist:
-            # 不存在，可以抛出一个404的异常，这个异常是django自带的
-            raise Http404
-        return obj1
+    # def get_object(self, pk):
+    #     try:
+    #         # obj1 = Project.objects.get(id=pk)
+    #         obj1 = self.queryset.get(id=pk)
+    #     except Project.DoesNotExist:
+    #         # 不存在，可以抛出一个404的异常，这个异常是django自带的
+    #         raise Http404
+    #     return obj1
 
     def put(self, request, pk):
         """更新某个项目"""
         # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
         # 2.获取到数据库中该id查询的结果对象
-        obj2 = self.get_object(pk=pk)
+        # obj2 = self.get_object(pk=pk)
+        obj2 = self.get_object()
+
         # print(obj2.name,type(obj2.name))
         # 3.从前端获取json格式的数据
         # json_data = request.body.decode('utf-8')
@@ -281,7 +285,8 @@ class ProjectDetail(GenericAPIView):
     def delete(self,request,pk):
         # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
         # 2.获取到数据库中该id查询的结果对象
-        obj2 =self.get_object(pk)
+        # obj2 =self.get_object(pk)
+        obj2=self.get_object()
         obj2.delete()
 
         # return JsonResponse(None,safe=False,status=204)
