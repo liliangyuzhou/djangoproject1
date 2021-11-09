@@ -29,6 +29,8 @@ class ProjectList(GenericAPIView):
         #GenericAPIView不要直接使用queryset属性来获取查询集
         #需要使用self.get_queryset()来获取查询集，因为更加灵活，后面可以重写父类的get_queryset()
         obj_list = self.get_queryset()
+        param=request.query_params.get("name")
+        obj_list=obj_list.filter(name__icontains=param)
 
         # # 将数据库模型实例转化为字典类型（嵌套字典的列表）
         # project_list = []

@@ -93,7 +93,7 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
     #如果还有定制化的序列化器属性，比如自定义的序列化器校验器，直接都用对应同名的字段来覆盖
     name = serializers.CharField(label="项目名称", max_length=30,
-                                 help_text="项目名称", write_only=True,
+                                 help_text="项目名称",
                                  validators=[UniqueValidator(queryset=Project.objects.all(), message="名称不能重复"),
                                              is_unqiue_project_name])
     #在父表序列化器中定义从表的关联字段（一对多）
