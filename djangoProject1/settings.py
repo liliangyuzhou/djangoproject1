@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'polls',
-    #注册子应用
-    #子应用名.apps.子应用名首字母大写Config，或者直接写应用名称就可以
-    #'interfaces.apps.InterfacesConfig'
+    # 注册子应用
+    # 子应用名.apps.子应用名首字母大写Config，或者直接写应用名称就可以
+    # 'interfaces.apps.InterfacesConfig'
     'interfaces',
     'projects',
 
@@ -135,3 +135,25 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 定制drf框架的参数，覆盖rest_framework框架源码中的配置文件settings.py中对应的key-value
+REST_FRAMEWORK = {
+    # 定义解析器类，用于解析不同的前段参数类型，会自动根据请求头的content-type来解析参数
+    # 无论前段端传递这三种参数的哪一种，都可以使用request.data来获取
+    # 覆盖后按照这里的配置文件来设定
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        # 'rest_framework.parsers.FormParser',
+        # 'rest_framework.parsers.MultiPartParser'
+    ],
+    #定义渲染器类，用于返回不同的参数类型
+    # 不同的参数可以根据前端请求的accept参数制定视图函数的的返回值的
+    # 类型（视图函数必须使用from rest_framework.response import Response来进行返回）
+    # 。rest_framework框架源码中的配置文件settings.py默认是下面2种，不指定自动识别可以覆盖指定
+    #如果前端不指定accept或者指定为application/json 那么以json数据返回
+    #如果指定accept为text/html（浏览器发起get请求时会自动指定），那么会以html数据返回
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+}

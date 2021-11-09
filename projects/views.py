@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, Http404
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 from polls.models import Project
 # Create your views here.
@@ -29,8 +31,9 @@ class ProjectList(APIView):
         #     project_list.append(one_project)
         # return JsonResponse(project_list, safe=False)
         ser=serializer.ProjectModelSerializer(instance=obj_list,many=True)
-        return JsonResponse(ser.data,safe=False)
+        # return JsonResponse(ser.data,safe=False)
         # return HttpResponse("Hello, GET")
+        return Response(ser.data,status=status.HTTP_200_OK)
 
     def post(self, request):
         """新增项目"""
@@ -42,12 +45,13 @@ class ProjectList(APIView):
         # ser=serializer.ProjectModelSerializer(data=python_data)
         ser = serializer.ProjectModelSerializer(data=request.data)
         #校验前端输入的数据
-        try:
-            ser.is_valid(raise_exception=True)
-        except Exception:
-            # 只有在调用is_valid(raise_exception=True)
-            # 方法之后，才可以调用errors属性，获取校验的错误提示
-            return JsonResponse(ser.errors)
+        # try:
+        #     ser.is_valid(raise_exception=True)
+        # except Exception:
+        #     # 只有在调用is_valid(raise_exception=True)
+        #     # 方法之后，才可以调用errors属性，获取校验的错误提示
+        #     return JsonResponse(ser.errors)
+        ser.is_valid(raise_exception=True)
 
         # 2.向数据库中新增项目
         # obj=Project.objects.create(name=python_data['name'],
@@ -82,7 +86,14 @@ class ProjectList(APIView):
         # return JsonResponse(one_project,status=201)
         ##### 这里写错了，只需要一个序列化器对象，之前是分开写序列化输出，和序列化输入的
         ##### ser=serializer.ProjectSerializer(obj)
-        return JsonResponse(ser.data)
+        # return JsonResponse(ser.data)
+        #在drf框架中，一定要用Response来进行返回
+        #response是httpresponse的子类，具有httpresponse的所有功能
+        #可以自动根据请求头中的accept参数，来返回相应数据格式到前端
+
+        #第一个参数为python中的常用数据类型（字典，嵌套字典列表），尽量使序列化器类.data
+        #status指定相应状态码，content_type指定响应体数据类型
+        return Response(ser.data,status=status.HTTP_200_OK)
 
 
 # class ProjectDetail(View):
@@ -172,7 +183,8 @@ class ProjectDetail(APIView):
         #2.通过序列化器ProjectSerializer对象的data属性，就可以获得转化之后的字典
         ser=serializer.ProjectModelSerializer(instance=obj1)
         #加入json_dumps_params={"ensure_ascii":False}可以调用接口在浏览器上，展示中文
-        return JsonResponse(ser.data,json_dumps_params={"ensure_ascii":False})
+        # return JsonResponse(ser.data,json_dumps_params={"ensure_ascii":False})
+        return Response(ser.data,status=status.HTTP_200_OK)
 
     def get_object(self, pk):
         try:
@@ -189,12 +201,13 @@ class ProjectDetail(APIView):
         obj2 = self.get_object(pk=pk)
         # print(obj2.name,type(obj2.name))
         # 3.从前端获取json格式的数据
-        json_data = request.body.decode('utf-8')
-        python_data = json.loads(json_data)
+        # json_data = request.body.decode('utf-8')
+        # python_data = json.loads(json_data)
         # print(python_data)
         # print(python_data['name'])
         # print(obj2.name)
-        ser=serializer.ProjectModelSerializer(instance=obj2,data=python_data)
+        # ser=serializer.ProjectModelSerializer(instance=obj2,data=python_data)
+        ser = serializer.ProjectModelSerializer(instance=obj2, data=request.data)
         # 校验前端输入的数据
         try:
             ser.is_valid(raise_exception=True)
@@ -229,7 +242,8 @@ class ProjectDetail(APIView):
         # print(one_project)
         # return JsonResponse(one_project,status=201)
         # ser=serializer.ProjectSerializer(instance=obj2)
-        return JsonResponse(ser.data,status=201)
+        # return JsonResponse(ser.data,status=201)
+        return Response(ser.data,status=status.HTTP_201_CREATED)
 
 
     def delete(self,request,pk):
@@ -238,4 +252,5 @@ class ProjectDetail(APIView):
         obj2 =self.get_object(pk)
         obj2.delete()
 
-        return JsonResponse(None,safe=False,status=204)
+        # return JsonResponse(None,safe=False,status=204)
+        return Response(None,status=status.HTTP_200_OK)
