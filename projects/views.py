@@ -14,6 +14,8 @@ import json
 from projects import serializer
 from rest_framework.viewsets import ModelViewSet
 
+from rest_framework.filters import SearchFilter
+
 class ProjectList(GenericAPIView):
     # GenericAPIView是APIView的子类，具有APIView的所有功能
     #使用GenericAPIView必须要指定queryset和serializer_class两个类属性
@@ -21,7 +23,13 @@ class ProjectList(GenericAPIView):
     #serializer_class是对应的序列化器
     queryset=Project.objects.all()
     serializer_class=serializer.ProjectModelSerializer
+    #指定模型序列化器类那些字段需要过滤，可以在字段前面添加前缀，^（必须以什么开头），=，@，$ ，在源码中可以看到
+    #该字段的列表里面的值必须和模型序列化器类的属性名称保持一致，那些参数需要进行过滤，列表中就写那些参数
+    search_fields=['name','tester']
 
+    #a.可以在全局配置文件中，指定对应的搜索引擎（对所有获取数据列表的功能都会支持过滤功能）
+    #b.也可以在特定的类视图中指定filter_backends过滤
+    filter_backends = [SearchFilter]
     def get(self, request):
         # 1.从数据库中获取所有的项目信息
         # obj_list = Project.objects.all()
@@ -29,8 +37,11 @@ class ProjectList(GenericAPIView):
         #GenericAPIView不要直接使用queryset属性来获取查询集
         #需要使用self.get_queryset()来获取查询集，因为更加灵活，后面可以重写父类的get_queryset()
         obj_list = self.get_queryset()
-        param=request.query_params.get("name")
-        obj_list=obj_list.filter(name__icontains=param)
+
+        # param=request.query_params.get("name")
+        # obj_list=obj_list.filter(name__icontains=param)
+        #将获取到的查询集传递到filter_queryset()，过滤完成后返回的依然是一个查询集
+        obj_list=self.filter_queryset(obj_list)
 
         # # 将数据库模型实例转化为字典类型（嵌套字典的列表）
         # project_list = []

@@ -146,14 +146,19 @@ REST_FRAMEWORK = {
         # 'rest_framework.parsers.FormParser',
         # 'rest_framework.parsers.MultiPartParser'
     ],
-    #定义渲染器类，用于返回不同的参数类型
+    # 定义渲染器类，用于返回不同的参数类型
     # 不同的参数可以根据前端请求的accept参数制定视图函数的的返回值的
     # 类型（视图函数必须使用from rest_framework.response import Response来进行返回）
     # 。rest_framework框架源码中的配置文件settings.py默认是下面2种，不指定自动识别可以覆盖指定
-    #如果前端不指定accept或者指定为application/json 那么以json数据返回
-    #如果指定accept为text/html（浏览器发起get请求时会自动指定），那么会以html数据返回
+    # 如果前端不指定accept或者指定为application/json 那么以json数据返回
+    # 如果指定accept为text/html（浏览器发起get请求时会自动指定），那么会以html数据返回
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
+    #当前搜索引擎配置全局生效
+    # 'DEFAULT_FILTER_BACKENDS': ['rest_framework.filters.SearchFilter'],
+    # Filtering，修改查询字符串参数的key，默认key是search
+    'SEARCH_PARAM': 'search1',
+    'ORDERING_PARAM': 'ordering',
 }
