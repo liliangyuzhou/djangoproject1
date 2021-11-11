@@ -44,10 +44,10 @@ class ProjectList(GenericAPIView):
         # obj_list=obj_list.filter(name__icontains=param)
         #将获取到的查询集传递到filter_queryset()，过滤完成后返回的依然是一个查询集
         obj_list=self.filter_queryset(obj_list)
-        # page=self.paginate_queryset(obj_list)
-        # if page is not None:
-        #     ser = self.get_serializer(instance=page, many=True)
-        #     return self.get_paginated_response(ser.data)
+        page=self.paginate_queryset(obj_list)
+        if page is not None:
+            ser = self.get_serializer(instance=page, many=True)
+            return self.get_paginated_response(ser.data)
 
         # # 将数据库模型实例转化为字典类型（嵌套字典的列表）
         # project_list = []

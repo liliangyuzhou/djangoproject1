@@ -161,8 +161,8 @@ REST_FRAMEWORK = {
     # Filtering，修改查询字符串参数的key，默认key是search
     'SEARCH_PARAM': 'search1',
     'ORDERING_PARAM': 'ordering1',
-    # #指定分页引擎
-    # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
-    # #指定分页的每页的条数
-    # 'PAGE_SIZE': 3,
+    #指定分页引擎
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    #指定分页的每页的条数
+    'PAGE_SIZE': 3,
 }
