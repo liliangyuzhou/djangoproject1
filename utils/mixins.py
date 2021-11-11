@@ -36,3 +36,9 @@ class UpdateModelMixin:
         ser.is_valid(raise_exception=True)
         ser.save()
         return Response(ser.data, status=status.HTTP_201_CREATED)
+
+class DestoryModelMixin:
+    def destory(self,*args,**kwargs):
+        obj2 = self.get_object()
+        obj2.delete()
+        return Response(None, status=status.HTTP_200_OK)

@@ -42,7 +42,7 @@ class ProjectList(mixins.ListModelMixin,
     pagination_class =PageNumberPagination
 
     def get(self, request,*args,**kwargs):
-        return self.list(*args,**kwargs)
+        return self.list(request,*args,**kwargs)
 
     def post(self, request,*args,**kwargs):
         return self.create(request,*args,**kwargs)
@@ -118,30 +118,15 @@ class ProjectList(mixins.ListModelMixin,
 
 class ProjectDetail(mixins.RetriveModelMixin,
                     mixins.UpdateModelMixin,
+                    mixins.DestoryModelMixin,
                     GenericAPIView):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
     def get(self, request,*args,**kwargs):
         return self.retrive(*args,**kwargs)
 
-    # def get_object(self, pk):
-    #     try:
-    #         # obj1 = Project.objects.get(id=pk)
-    #         obj1 = self.queryset.get(id=pk)
-    #     except Project.DoesNotExist:
-    #         # 不存在，可以抛出一个404的异常，这个异常是django自带的
-    #         raise Http404
-    #     return obj1
-
     def put(self, request, *args,**kwargs):
         return self.update(request,*args,**kwargs)
 
-    def delete(self,request,pk):
-        # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
-        # 2.获取到数据库中该id查询的结果对象
-        # obj2 =self.get_object(pk)
-        obj2=self.get_object()
-        obj2.delete()
-
-        # return JsonResponse(None,safe=False,status=204)
-        return Response(None,status=status.HTTP_200_OK)
+    def delete(self,request,*args,**kwargs):
+        return self.destory(request,*args,**kwargs)
