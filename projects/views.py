@@ -15,6 +15,7 @@ from projects import serializer
 from rest_framework.viewsets import ModelViewSet
 
 from rest_framework.filters import SearchFilter
+from rest_framework.filters import OrderingFilter
 
 class ProjectList(GenericAPIView):
     # GenericAPIView是APIView的子类，具有APIView的所有功能
@@ -25,11 +26,12 @@ class ProjectList(GenericAPIView):
     serializer_class=serializer.ProjectModelSerializer
     #指定模型序列化器类那些字段需要过滤，可以在字段前面添加前缀，^（必须以什么开头），=，@，$ ，在源码中可以看到
     #该字段的列表里面的值必须和模型序列化器类的属性名称保持一致，那些参数需要进行过滤，列表中就写那些参数
-    search_fields=['name','tester']
+    search_fields=['name','tester','id']
 
     #a.可以在全局配置文件中，指定对应的搜索引擎（对所有获取数据列表的功能都会支持过滤功能）
     #b.也可以在特定的类视图中指定filter_backends过滤
-    filter_backends = [SearchFilter]
+    filter_backends = [SearchFilter, OrderingFilter]
+    ordering_fields=['name','tester','id']
     def get(self, request):
         # 1.从数据库中获取所有的项目信息
         # obj_list = Project.objects.all()
@@ -42,6 +44,10 @@ class ProjectList(GenericAPIView):
         # obj_list=obj_list.filter(name__icontains=param)
         #将获取到的查询集传递到filter_queryset()，过滤完成后返回的依然是一个查询集
         obj_list=self.filter_queryset(obj_list)
+        # page=self.paginate_queryset(obj_list)
+        # if page is not None:
+        #     ser = self.get_serializer(instance=page, many=True)
+        #     return self.get_paginated_response(ser.data)
 
         # # 将数据库模型实例转化为字典类型（嵌套字典的列表）
         # project_list = []

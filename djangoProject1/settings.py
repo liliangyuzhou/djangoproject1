@@ -157,8 +157,12 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     #当前搜索引擎配置全局生效
-    # 'DEFAULT_FILTER_BACKENDS': ['rest_framework.filters.SearchFilter'],
+    # 'DEFAULT_FILTER_BACKENDS': ['rest_framework.filters.SearchFilter',rest_framework.filters.OrderingFilter],
     # Filtering，修改查询字符串参数的key，默认key是search
     'SEARCH_PARAM': 'search1',
-    'ORDERING_PARAM': 'ordering',
+    'ORDERING_PARAM': 'ordering1',
+    # #指定分页引擎
+    # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    # #指定分页的每页的条数
+    # 'PAGE_SIZE': 3,
 }
