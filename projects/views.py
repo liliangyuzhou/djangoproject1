@@ -18,7 +18,9 @@ from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 
-class ProjectList(GenericAPIView):
+from utils import mixins
+
+class ProjectList(mixins.ListModelMixin,GenericAPIView):
     # GenericAPIView是APIView的子类，具有APIView的所有功能
     #使用GenericAPIView必须要指定queryset和serializer_class两个类属性
     #queryset是当前类视图函数所需要的查询集
@@ -37,46 +39,8 @@ class ProjectList(GenericAPIView):
     #为了不全局配置搜索引擎，只对某个类视图生效，可以通过pagination_class指定搜索引擎
     pagination_class =PageNumberPagination
 
-    def get(self, request):
-        # 1.从数据库中获取所有的项目信息
-        # obj_list = Project.objects.all()
-        # obj_list = self.queryset
-        #GenericAPIView不要直接使用queryset属性来获取查询集
-        #需要使用self.get_queryset()来获取查询集，因为更加灵活，后面可以重写父类的get_queryset()
-        obj_list = self.get_queryset()
-
-        # param=request.query_params.get("name")
-        # obj_list=obj_list.filter(name__icontains=param)
-        #将获取到的查询集传递到filter_queryset()，过滤完成后返回的依然是一个查询集
-        obj_list=self.filter_queryset(obj_list)
-        page=self.paginate_queryset(obj_list)
-        if page is not None:
-            ser = self.get_serializer(instance=page, many=True)
-            return self.get_paginated_response(ser.data)
-
-        # # 将数据库模型实例转化为字典类型（嵌套字典的列表）
-        # project_list = []
-        # for i in obj_list:
-        #     one_project = {
-        #         "name": i.name,
-        #         "leader": i.leader,
-        #         "tester": i.tester,
-        #         "developer": i.developer,
-        #         "publish_app": i.publish_app,
-        #     }
-        #     project_list.append(one_project)
-        # return JsonResponse(project_list, safe=False)
-        # ser=serializer.ProjectModelSerializer(instance=obj_list,many=True)
-
-        #同样的GenericAPIView中不要直接通过类属性serializer_class来获取序列化器
-        #使用self.get_serializer来获取序列化器
-        # ser=self.serializer_class(instance=obj_list,many=True)
-        ser=self.get_serializer(instance=obj_list,many=True)
-
-
-        # return JsonResponse(ser.data,safe=False)
-        # return HttpResponse("Hello, GET")
-        return Response(ser.data,status=status.HTTP_200_OK)
+    def get(self, request,*args,**kwargs):
+        return self.list(*args,**kwargs)
 
     def post(self, request):
         """新增项目"""
