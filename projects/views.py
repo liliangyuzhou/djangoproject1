@@ -116,34 +116,12 @@ class ProjectList(mixins.ListModelMixin,
 #     serializer_class = ProjectModelSerializer
 
 
-class ProjectDetail(GenericAPIView):
+class ProjectDetail(mixins.RetriveModelMixin,
+                    GenericAPIView):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
-    def get(self, request, pk):
-        """获取数据详情"""
-        # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
-
-        # 2.获取到数据库中该id查询的结果对象
-        # obj1 = self.get_object(pk)
-        #使用GenericAPIView中的self.get_object()来获取单个模型对象，就不要我们使用自己自定义的get_object()
-        obj1=self.get_object()
-        # 3.将获取到的模型类对象转化为字典，返回
-        # one_project = {
-        #     "name": obj1.name,
-        #     "leader": obj1.leader,
-        #     "tester": obj1.tester,
-        #     "developer": obj1.developer,
-        #     "publish_app": obj1.publish_app,
-        #     "desc": obj1.desc
-        # }
-        #1.通过模型类对象（或者查询集），传给instance参数，可以进行序列化操作
-        #2.通过序列化器ProjectSerializer对象的data属性，就可以获得转化之后的字典
-        # ser=self.serializer_class(instance=obj1)
-        ser=self.get_serializer(instance=obj1)
-
-        #加入json_dumps_params={"ensure_ascii":False}可以调用接口在浏览器上，展示中文
-        # return JsonResponse(ser.data,json_dumps_params={"ensure_ascii":False})
-        return Response(ser.data,status=status.HTTP_200_OK)
+    def get(self, request,*args,**kwargs):
+        return self.retrive(*args,**kwargs)
 
     # def get_object(self, pk):
     #     try:
