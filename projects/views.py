@@ -117,6 +117,7 @@ class ProjectList(mixins.ListModelMixin,
 
 
 class ProjectDetail(mixins.RetriveModelMixin,
+                    mixins.UpdateModelMixin,
                     GenericAPIView):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
@@ -132,65 +133,8 @@ class ProjectDetail(mixins.RetriveModelMixin,
     #         raise Http404
     #     return obj1
 
-    def put(self, request, pk):
-        """更新某个项目"""
-        # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在
-        # 2.获取到数据库中该id查询的结果对象
-        # obj2 = self.get_object(pk=pk)
-        obj2 = self.get_object()
-
-        # print(obj2.name,type(obj2.name))
-        # 3.从前端获取json格式的数据
-        # json_data = request.body.decode('utf-8')
-        # python_data = json.loads(json_data)
-        # print(python_data)
-        # print(python_data['name'])
-        # print(obj2.name)
-        # ser=serializer.ProjectModelSerializer(instance=obj2,data=python_data)
-        # ser = serializer.ProjectModelSerializer(instance=obj2, data=request.data)
-        # ser = self.serializer_class(instance=obj2, data=request.data)
-        ser = self.get_serializer(instance=obj2, data=request.data)
-
-        #使用的apiview后不需要我们主动捕获异常，会自动处理
-        ser.is_valid(raise_exception=True)
-
-        # 校验前端输入的数据
-        # try:
-        #     ser.is_valid(raise_exception=True)
-        # except Exception as e:
-        #     # 只有在调用is_valid(raise_exception=True)
-        #     # 方法之后，才可以调用errors属性，获取校验的错误提示
-        #     return JsonResponse(ser.errors)
-
-        # 更新项目
-        #序列化器对象ser直接调用save()方法，调用的是序列化器的create方法，并且列化器只需要传递data属性
-        #要使用save方法调用update方法，要给序列化器同时传递instance属性和data属性
-        ser.save()
-        # obj2.name = ser.validated_data['name']
-        # obj2.leader = ser.validated_data['leader']
-        # obj2.tester = ser.validated_data['tester']
-        # obj2.developer = ser.validated_data['developer']
-        # obj2.desc = ser.validated_data['desc']
-        # obj2.publish_app = ser.validated_data['publish_app']
-        # obj2.save()
-        # print(type(obj2.name))
-
-        # 将更新后的项目转化为字典
-        # one_project = {
-        #     "name": obj2.name,
-        #     "leader": obj2.leader,
-        #     "tester": obj2.tester,
-        #     "developer": obj2.developer,
-        #     "publish_app": obj2.publish_app,
-        #     "desc": obj2.desc
-        # }
-
-        # print(one_project)
-        # return JsonResponse(one_project,status=201)
-        # ser=serializer.ProjectSerializer(instance=obj2)
-        # return JsonResponse(ser.data,status=201)
-        return Response(ser.data,status=status.HTTP_201_CREATED)
-
+    def put(self, request, *args,**kwargs):
+        return self.update(request,*args,**kwargs)
 
     def delete(self,request,pk):
         # 1.校验前端传递的pk（项目id）值，类型是否正确，在数据库中是否存在

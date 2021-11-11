@@ -29,9 +29,10 @@ class RetriveModelMixin:
         ser = self.get_serializer(instance=obj1)
         return Response(ser.data, status=status.HTTP_200_OK)
 
-# class UpdateModelMixin:
-#     def update(self,request,*args,**kwargs):
-#         obj2 = self.get_object()
-#         ser = self.get_serializer(instance=obj2, data=request.data)
-#         ser.save()
-#         return Response(ser.data, status=status.HTTP_201_CREATED)
+class UpdateModelMixin:
+    def update(self,request,*args,**kwargs):
+        obj2 = self.get_object()
+        ser = self.get_serializer(instance=obj2, data=request.data)
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        return Response(ser.data, status=status.HTTP_201_CREATED)
