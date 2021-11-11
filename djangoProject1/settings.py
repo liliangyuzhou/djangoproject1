@@ -163,9 +163,9 @@ REST_FRAMEWORK = {
     'ORDERING_PARAM': 'ordering1',
     # 指定分页引擎
     # 'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
-    #自定义的分页引擎
-    'DEFAULT_PAGINATION_CLASS': 'utils.pagination.PageNumberPagination',
-
-    # 指定分页的每页的条数
+    # #自定义的分页引擎
+    # 'DEFAULT_PAGINATION_CLASS': 'utils.pagination.PageNumberPagination',
+    #
+    # # 指定分页的每页的条数
     'PAGE_SIZE': 3,
 }

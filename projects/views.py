@@ -16,6 +16,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
+from rest_framework.pagination import PageNumberPagination
 
 class ProjectList(GenericAPIView):
     # GenericAPIView是APIView的子类，具有APIView的所有功能
@@ -32,6 +33,10 @@ class ProjectList(GenericAPIView):
     #b.也可以在特定的类视图中指定filter_backends过滤
     filter_backends = [SearchFilter, OrderingFilter]
     ordering_fields=['name','tester','id']
+
+    #为了不全局配置搜索引擎，只对某个类视图生效，可以通过pagination_class指定搜索引擎
+    pagination_class =PageNumberPagination
+
     def get(self, request):
         # 1.从数据库中获取所有的项目信息
         # obj_list = Project.objects.all()
