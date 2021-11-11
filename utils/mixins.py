@@ -15,3 +15,11 @@ class ListModelMixin:
             return self.get_paginated_response(ser.data)
         ser = self.get_serializer(instance=obj_list, many=True)
         return Response(ser.data, status=status.HTTP_200_OK)
+
+class CreateModelMixin:
+    def create(self,request,*args,**kwargs):
+        ser = self.get_serializer(data=request.data)
+        ser.is_valid(raise_exception=True)
+
+        ser.save()
+        return Response(ser.data, status=status.HTTP_200_OK)

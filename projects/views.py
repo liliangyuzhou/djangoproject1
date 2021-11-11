@@ -20,7 +20,9 @@ from rest_framework.pagination import PageNumberPagination
 
 from utils import mixins
 
-class ProjectList(mixins.ListModelMixin,GenericAPIView):
+class ProjectList(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  GenericAPIView):
     # GenericAPIView是APIView的子类，具有APIView的所有功能
     #使用GenericAPIView必须要指定queryset和serializer_class两个类属性
     #queryset是当前类视图函数所需要的查询集
@@ -42,67 +44,9 @@ class ProjectList(mixins.ListModelMixin,GenericAPIView):
     def get(self, request,*args,**kwargs):
         return self.list(*args,**kwargs)
 
-    def post(self, request):
-        """新增项目"""
-        # 1. 从前端获取json格式的数据，转换为python中的类型
-        # 为了严谨性，这里需要做各种复杂的校验
-        # 比如：是否是json，传递的项目数据是否符合要求，有些必传参数是否携带
-        # json_data = request.body.decode('utf-8')
-        # python_data = json.loads(json_data)
-        # ser=serializer.ProjectModelSerializer(data=python_data)
-        # ser = serializer.ProjectModelSerializer(data=request.data)
-        # ser = self.serializer_class(data=request.data)
-        ser = self.get_serializer(data=request.data)
-        #校验前端输入的数据
-        # try:
-        #     ser.is_valid(raise_exception=True)
-        # except Exception:
-        #     # 只有在调用is_valid(raise_exception=True)
-        #     # 方法之后，才可以调用errors属性，获取校验的错误提示
-        #     return JsonResponse(ser.errors)
-        ser.is_valid(raise_exception=True)
+    def post(self, request,*args,**kwargs):
+        return self.create(request,*args,**kwargs)
 
-        # 2.向数据库中新增项目
-        # obj=Project.objects.create(name=python_data['name'],
-        #                        leader=python_data["leader"],
-        #                        tester=python_data['tester'],
-        #                        developer=python_data['developer'],
-        #                        desc=python_data['desc'],
-        #                        publish_app=python_data['publish_app'],
-        #                        desc=python_data['desc'])
-        #  **字典，可以将字典key-value键值对拆为关键字参数key=value
-
-
-        # obj = Project.objects.create(**python_data)
-        # 校验成功后的数据使用ser.validated_data
-        # obj = Project.objects.create(**ser.validated_data)
-
-        #1。在序列化器中调用了create（）方法，要在试图函数中使用序列化器对象调用save（）方法
-        #2。如果在创建序列化器对象的时候，只给data传参，那么调用save（）方法，实际是调用的序列化器的create（）方法
-        #3。如果给save（）传递关键字参数，实际上是放到了validated_data里面，key值相同就是覆盖，不同的就是添加
-        # ser.save(user="李亮")
-        ser.save()
-        # 3.将模型类对象转化为字典，然后返回(一般restful风格的接口都要求有返回）
-
-        # one_project = {
-        #     "name": obj.name,
-        #     "leader": obj.leader,
-        #     "tester": obj.tester,
-        #     "developer": obj.developer,
-        #     "publish_app": obj.publish_app,
-        #     "desc": obj.desc
-        # }
-        # return JsonResponse(one_project,status=201)
-        ##### 这里写错了，只需要一个序列化器对象，之前是分开写序列化输出，和序列化输入的
-        ##### ser=serializer.ProjectSerializer(obj)
-        # return JsonResponse(ser.data)
-        #在drf框架中，一定要用Response来进行返回
-        #response是httpresponse的子类，具有httpresponse的所有功能
-        #可以自动根据请求头中的accept参数，来返回相应数据格式到前端
-
-        #第一个参数为python中的常用数据类型（字典，嵌套字典列表），尽量使序列化器类.data
-        #status指定相应状态码，content_type指定响应体数据类型
-        return Response(ser.data,status=status.HTTP_200_OK)
 
 
 # class ProjectDetail(View):
