@@ -18,8 +18,8 @@ from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 
-from utils import mixins
-
+# from utils import mixins
+from rest_framework import mixins
 class ProjectList(mixins.ListModelMixin,
                   mixins.CreateModelMixin,
                   GenericAPIView):
@@ -116,17 +116,17 @@ class ProjectList(mixins.ListModelMixin,
 #     serializer_class = ProjectModelSerializer
 
 
-class ProjectDetail(mixins.RetriveModelMixin,
+class ProjectDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
-                    mixins.DestoryModelMixin,
+                    mixins.DestroyModelMixin,
                     GenericAPIView):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
     def get(self, request,*args,**kwargs):
-        return self.retrive(*args,**kwargs)
+        return self.retrieve(request,*args,**kwargs)
 
     def put(self, request, *args,**kwargs):
         return self.update(request,*args,**kwargs)
 
     def delete(self,request,*args,**kwargs):
-        return self.destory(request,*args,**kwargs)
+        return self.destroy(request,*args,**kwargs)

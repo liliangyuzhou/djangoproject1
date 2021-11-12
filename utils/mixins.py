@@ -23,8 +23,8 @@ class CreateModelMixin:
         ser.save()
         return Response(ser.data, status=status.HTTP_200_OK)
 
-class RetriveModelMixin:
-    def retrive(self,*args,**kwargs):
+class RetrieveModelMixin:
+    def retrieve(self,*args,**kwargs):
         obj1 = self.get_object()
         ser = self.get_serializer(instance=obj1)
         return Response(ser.data, status=status.HTTP_200_OK)
@@ -37,7 +37,7 @@ class UpdateModelMixin:
         ser.save()
         return Response(ser.data, status=status.HTTP_201_CREATED)
 
-class DestoryModelMixin:
+class DestroyModelMixin:
     def destory(self,*args,**kwargs):
         obj2 = self.get_object()
         obj2.delete()
