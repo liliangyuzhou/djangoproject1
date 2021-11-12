@@ -21,8 +21,7 @@ from rest_framework.pagination import PageNumberPagination
 # from utils import mixins
 from rest_framework import mixins
 from rest_framework import generics
-class ProjectList(generics.CreateAPIView,
-                  generics.ListAPIView):
+class ProjectList(generics.ListCreateAPIView):
     # GenericAPIView是APIView的子类，具有APIView的所有功能
     #使用GenericAPIView必须要指定queryset和serializer_class两个类属性
     #queryset是当前类视图函数所需要的查询集
@@ -110,9 +109,7 @@ class ProjectList(generics.CreateAPIView,
 #     serializer_class = ProjectModelSerializer
 
 
-class ProjectDetail(generics.RetrieveAPIView,
-                    generics.UpdateAPIView,
-                    generics.DestroyAPIView):
+class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
 
