@@ -20,9 +20,9 @@ from rest_framework.pagination import PageNumberPagination
 
 # from utils import mixins
 from rest_framework import mixins
-class ProjectList(mixins.ListModelMixin,
-                  mixins.CreateModelMixin,
-                  GenericAPIView):
+from rest_framework import generics
+class ProjectList(generics.CreateAPIView,
+                  generics.ListAPIView):
     # GenericAPIView是APIView的子类，具有APIView的所有功能
     #使用GenericAPIView必须要指定queryset和serializer_class两个类属性
     #queryset是当前类视图函数所需要的查询集
@@ -40,12 +40,6 @@ class ProjectList(mixins.ListModelMixin,
 
     #为了不全局配置搜索引擎，只对某个类视图生效，可以通过pagination_class指定搜索引擎
     pagination_class =PageNumberPagination
-
-    def get(self, request,*args,**kwargs):
-        return self.list(request,*args,**kwargs)
-
-    def post(self, request,*args,**kwargs):
-        return self.create(request,*args,**kwargs)
 
 
 
@@ -116,17 +110,9 @@ class ProjectList(mixins.ListModelMixin,
 #     serializer_class = ProjectModelSerializer
 
 
-class ProjectDetail(mixins.RetrieveModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.DestroyModelMixin,
-                    GenericAPIView):
+class ProjectDetail(generics.RetrieveAPIView,
+                    generics.UpdateAPIView,
+                    generics.DestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
-    def get(self, request,*args,**kwargs):
-        return self.retrieve(request,*args,**kwargs)
 
-    def put(self, request, *args,**kwargs):
-        return self.update(request,*args,**kwargs)
-
-    def delete(self,request,*args,**kwargs):
-        return self.destroy(request,*args,**kwargs)
