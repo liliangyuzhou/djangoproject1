@@ -151,3 +151,10 @@ class ProjectModelSerializer(serializers.ModelSerializer):
     #     return attrs
     #
     # #自动创建create和update，但是可以覆盖写
+
+class ProjectNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Project
+        fields = ('name',)
+
+

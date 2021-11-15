@@ -142,6 +142,9 @@ from rest_framework import generics
 #                      mixins.ListModelMixin,
 #                      mixins.DestroyModelMixin,
 #                      viewsets.GenericViewSet):
+from projects.serializer import ProjectNameSerializer
+
+
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
@@ -167,8 +170,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
     @action(methods=['GET','POST'],detail=False)
     def names(self,request,*args,**kwargs):
         queryset=self.get_queryset()
-        name_list=[]
-        for obj in queryset:
-            # name_list.append(obj.name)
-            name_list.append({'项目名称':obj.name})
-        return Response(name_list,status=200)
+        # name_list=[]
+        # for obj in queryset:
+        #     # name_list.append(obj.name)
+        #     name_list.append({'项目名称':obj.name})
+        # return Response(name_list, status=200)
+        serializer=ProjectNameSerializer(instance=queryset,many=True)
+        return Response(serializer.data,status=200)
+
