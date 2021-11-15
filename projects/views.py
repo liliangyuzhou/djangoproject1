@@ -167,7 +167,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     # 如果接口需要传递id值，那么需要将detail参数改为True，否则需要传False
     #  url_path指定url的路径字符串,默认是函数名称
     #  url_name指定url的名称,默认是函数名称
-    @action(methods=['GET','POST'],detail=False)
+    @action(methods=['GET','POST'],detail=False,url_path='pm',url_name='url_name')
     def names(self,request,*args,**kwargs):
         queryset=self.get_queryset()
         # name_list=[]
