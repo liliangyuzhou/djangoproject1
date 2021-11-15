@@ -109,7 +109,8 @@ class ProjectModelSerializer(serializers.ModelSerializer):
     #如果该字段要指定从表某个字段，使用SlugRelatedField
     # interfaces_set = serializers.SlugRelatedField(slug_field="tester",many=True,read_only=True)
 
-    #我们还可以拿到从表的序列化器类，作为一个父表的一个字段，因为继承关系,都是继承自filed
+    #我们还可以拿到从表的序列化器类，作为一个父表的一个字段，因为继承关系,都是继承自filed，这样这个序列化器输出几个字段，那么
+    #interfaces_set里面就包含几个字段
     # interfaces_set=InterfacesModelSerializer(label="所属接口的信息",many=True)
 
     class Meta:
@@ -157,4 +158,8 @@ class ProjectNameSerializer(serializers.ModelSerializer):
         model=Project
         fields = ('name',)
 
-
+class ProjectInterfacesSerializer(serializers.ModelSerializer):
+    interfaces_set = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    class Meta:
+        model=Project
+        fields = ('interfaces_set',)

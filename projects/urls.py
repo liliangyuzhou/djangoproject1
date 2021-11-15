@@ -28,9 +28,13 @@ urlpatterns = [
         'patch': 'partial_update'
     })),
     path('index/names', views.ProjectViewSet.as_view({
-        #获取所有的项目名称
+        # 获取所有的项目名称
         'get': 'names',
-        # 'post':'names',
+        # 'post':'names'
+
+    })),
+    path('<int:pk>/interfaces', views.ProjectViewSet.as_view({
+        'get': 'interfaces',
     })),
 
 ]

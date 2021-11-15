@@ -184,7 +184,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
         #可以根据action去选择不同的序列化器类
         if self.action=='names':
             return serializer.ProjectNameSerializer
+        elif self.action=='interfaces':
+            return serializer.ProjectInterfacesSerializer
         else:
             return self.serializer_class
+
+    #查询单个项目下面的所有接口
+    @action(detail=True)
+    def interfaces(self,request,*args,**kwargs):
+        queryset = self.get_object()
+        serializer=self.get_serializer(instance=queryset)
+        return Response(serializer.data,status=200)
 
 
