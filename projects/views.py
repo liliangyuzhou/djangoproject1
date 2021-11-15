@@ -135,12 +135,13 @@ from rest_framework import generics
 
 #可以继续继承各种mixin，同时继承viewsets.GenericViewSet，这个类放到后面
 #可以按照需求继承mixin
-class ProjectViewSet(mixins.RetrieveModelMixin,
-                     mixins.CreateModelMixin,
-                     mixins.UpdateModelMixin,
-                     mixins.ListModelMixin,
-                     mixins.DestroyModelMixin,
-                     viewsets.GenericViewSet):
+# class ProjectViewSet(mixins.RetrieveModelMixin,
+#                      mixins.CreateModelMixin,
+#                      mixins.UpdateModelMixin,
+#                      mixins.ListModelMixin,
+#                      mixins.DestroyModelMixin,
+#                      viewsets.GenericViewSet):
+class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
     # 指定模型序列化器类那些字段需要过滤，可以在字段前面添加前缀，^（必须以什么开头），=，@，$ ，在源码中可以看到
@@ -154,16 +155,3 @@ class ProjectViewSet(mixins.RetrieveModelMixin,
 
     # 为了不全局配置搜索引擎，只对某个类视图生效，可以通过pagination_class指定搜索引擎
     pagination_class = PageNumberPagination
-
-    # def list(self, request, *args, **kwargs):
-    #     pass
-    # def create(self, request, *args, **kwargs):
-    #     pass
-    # def update(self, request, *args, **kwargs):
-    #     pass
-    # def partial_update(self,request,*args,**kwargs):
-    #     pass
-    # def retrieve(self, request, *args, **kwargs):
-    #     pass
-    # def destroy(self, request, *args, **kwargs):
-    #     pass
