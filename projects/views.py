@@ -19,6 +19,7 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
 
 # from utils import mixins
 from rest_framework import mixins
@@ -155,3 +156,19 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     # 为了不全局配置搜索引擎，只对某个类视图生效，可以通过pagination_class指定搜索引擎
     pagination_class = PageNumberPagination
+
+    #可以使用action装饰器，自定义指定的action
+    #如果不写methods，默认是get方法
+    #如果该方法支持多种请求方法methods=['GET','POST']
+    #detail参数指定action是否是详情接口（是否需要传递主键ID值）
+    # 如果接口需要传递id值，那么需要将detail参数改为True，否则需要传False
+    #  url_path指定url的路径字符串,默认是函数名称
+    #  url_name指定url的名称,默认是函数名称
+    @action(methods=['GET','POST'],detail=False)
+    def names(self,request,*args,**kwargs):
+        queryset=self.get_queryset()
+        name_list=[]
+        for obj in queryset:
+            # name_list.append(obj.name)
+            name_list.append({'项目名称':obj.name})
+        return Response(name_list,status=200)

@@ -16,16 +16,21 @@ urlpatterns = [
     # 这里注意路由不要直接写""，里面有个空格或者/都可以，不然可能出不来django rest framework这个接口文档页面
     # path('index', views.ProjectList.as_view()),
     # path('<int:pk>', views.ProjectDetail.as_view()),
-    #仅仅只用继承GenericViewSet，或者ViewSet之后，才具有  方法名：动作一一对应的功能
+    # 仅仅只用继承GenericViewSet，或者ViewSet之后，才具有  方法名：动作一一对应的功能
     path('index', views.ProjectViewSet.as_view({
-        'get':'list',
-        'post':'create'
+        'get': 'list',
+        'post': 'create'
     })),
     path('<int:pk>', views.ProjectViewSet.as_view({
-        'get':'retrieve',
-        'put':'update',
-        'delete':'destroy',
-        'patch':'partial_update'
+        'get': 'retrieve',
+        'put': 'update',
+        'delete': 'destroy',
+        'patch': 'partial_update'
+    })),
+    path('index/names', views.ProjectViewSet.as_view({
+        #获取所有的项目名称
+        'get': 'names',
+        # 'post':'names',
     })),
 
 ]
