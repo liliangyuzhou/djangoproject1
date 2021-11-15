@@ -175,6 +175,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
         #     # name_list.append(obj.name)
         #     name_list.append({'项目名称':obj.name})
         # return Response(name_list, status=200)
-        serializer=ProjectNameSerializer(instance=queryset,many=True)
+        serializer=self.get_serializer(instance=queryset,many=True)
         return Response(serializer.data,status=200)
+
+    def get_serializer_class(self):
+        #如果一个类中，使用了多个不同序列化器类，那么我们可以将get_serializer_class重写
+        #继承视图集类后，会提供action属性，指定当前请求的action方法名称
+        #可以根据action去选择不同的序列化器类
+        if self.action=='names':
+            return serializer.ProjectNameSerializer
+        else:
+            return self.serializer_class
+
 
