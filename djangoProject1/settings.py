@@ -168,4 +168,6 @@ REST_FRAMEWORK = {
     #
     # # 指定分页的每页的条数
     'PAGE_SIZE': 3,
+    #指定用于支持coreapi的schema
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema'
 }

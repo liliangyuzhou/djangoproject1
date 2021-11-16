@@ -8,11 +8,11 @@ from rest_framework.routers import DefaultRouter
 from rest_framework import routers
 from . import views
 
-# router = DefaultRouter()
+router = DefaultRouter()
 # router.register(r"projects", views.ProjectViewSet)
 
 # 1.创建SimpleRouter()对象
-router=routers.SimpleRouter()
+# router=routers.SimpleRouter()
 # 2.注册路由
 #参数prefix：为路由前缀，一般添加为子应用名，不需要🏠as_view()
 # viewset：对应的视图集类
