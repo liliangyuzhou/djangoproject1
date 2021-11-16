@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'polls',
     # 注册子应用
     # 子应用名.apps.子应用名首字母大写Config，或者直接写应用名称就可以
@@ -168,6 +169,6 @@ REST_FRAMEWORK = {
     #
     # # 指定分页的每页的条数
     'PAGE_SIZE': 3,
-    #指定用于支持coreapi的schema
-    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema'
+    # 指定用于支持coreapi的schema
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
