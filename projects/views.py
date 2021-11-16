@@ -146,6 +146,27 @@ from projects.serializer import ProjectNameSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
+    """
+    项目类视图
+    retrieve:
+    获取单个项目
+    create:
+    创建项目
+    delete:
+    删除项目
+    update:
+    更新项目
+    partial_update:
+    部分更新项目
+    list:
+    获取所有的项目
+    names:
+    获取所有项目的名称
+    interfaces：
+    获取单个项目下的所有接口
+
+
+    """
     queryset = Project.objects.all()
     serializer_class = serializer.ProjectModelSerializer
     # 指定模型序列化器类那些字段需要过滤，可以在字段前面添加前缀，^（必须以什么开头），=，@，$ ，在源码中可以看到
