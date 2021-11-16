@@ -111,7 +111,7 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
     #我们还可以拿到从表的序列化器类，作为一个父表的一个字段，因为继承关系,都是继承自filed，这样这个序列化器输出几个字段，那么
     #interfaces_set里面就包含几个字段
-    interfaces_set=InterfacesModelSerializer(label="所属接口的信息",many=True)
+    interfaces_set=InterfacesModelSerializer(label="所属接口的信息",many=True,read_only=True)
 
     class Meta:
         # 1.指定参考哪一个模型类来创建
@@ -160,9 +160,9 @@ class ProjectNameSerializer(serializers.ModelSerializer):
 
 class ProjectInterfacesSerializer(serializers.ModelSerializer):
     #单独输出一个项目下所有接口的id
-    # interfaces_set = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    interfaces_set = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     #输出一个项目下所有接口的详细信息
-    interfaces_set = InterfacesModelSerializer(label="所属接口的信息", many=True)
+    # interfaces_set = InterfacesModelSerializer(label="所属接口的信息", many=True)
     class Meta:
         model=Project
         fields = ('interfaces_set',)
