@@ -20,7 +20,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action
-
+from rest_framework import permissions
 # from utils import mixins
 from rest_framework import mixins
 from rest_framework import generics
@@ -188,6 +188,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
     # 如果接口需要传递id值，那么需要将detail参数改为True，否则需要传False
     #  url_path指定url的路径字符串,默认是函数名称
     #  url_name指定url的名称,默认是函数名称
+    #添加权限，需要继承apiView才会有 permission_classes属性
+    permission_classes =[permissions.IsAuthenticated]
     @action(methods=['GET','POST'],detail=False,url_path='pm',url_name='url_name')
     def names(self,request,*args,**kwargs):
         queryset=self.get_queryset()
