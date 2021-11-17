@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -173,7 +174,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     # 覆盖drf默认的认证
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        #jwt token认证，顺序是先jwttoken-然后session，然后Basic
+        # jwt token认证，顺序是先jwttoken-然后session，然后Basic
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         # 支持账号密码进行认证
         'rest_framework.authentication.SessionAuthentication',
@@ -183,4 +184,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+}
+
+#jwt认证相关配置
+JWT_AUTH = {
+    # 修改jwt的token中前缀
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    # 设置token的失效时间
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=3),
 }
