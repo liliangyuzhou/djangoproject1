@@ -171,12 +171,15 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 3,
     # 指定用于支持coreapi的schema
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    #覆盖drf默认的认证
+    # 覆盖drf默认的认证
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        #jwt token认证，顺序是先jwttoken-然后session，然后Basic
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+        # 支持账号密码进行认证
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication'
     ],
-    #覆盖drf默认的授权
+    # 覆盖drf默认的授权
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
