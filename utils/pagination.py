@@ -3,6 +3,7 @@
 # author： liliang
 # datetime： 2021/11/11 14:27 
 # email： liang1.li@ximalaya.com
+#自定义的分页类，修改一些默认的属性
 from rest_framework.pagination import PageNumberPagination as _PageNumberPagination
 
 class PageNumberPagination(_PageNumberPagination):
