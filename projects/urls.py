@@ -18,6 +18,7 @@ router = DefaultRouter()
 # viewset：对应的视图集类
 router.register(r"projects",views.ProjectViewSet,)
 
+from rest_framework_jwt.views import obtain_jwt_token
 urlpatterns = [
     # 这里注意路由不要直接写""，里面有个空格或者/都可以，不然可能出不来django rest framework这个接口文档页面
     # path('index', views.ProjectList.as_view()),
@@ -44,6 +45,8 @@ urlpatterns = [
     # })),
     #将自动生成的路由添加到这个列表
     # path('',include(router.urls))
+    #在子应用中添加jwt认证的login接口
+    path('login/', obtain_jwt_token)
 ]
 
 urlpatterns += router.urls

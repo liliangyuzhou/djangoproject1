@@ -174,7 +174,7 @@ REST_FRAMEWORK = {
     # 覆盖drf默认的认证
     'DEFAULT_AUTHENTICATION_CLASSES': [
         #jwt token认证，顺序是先jwttoken-然后session，然后Basic
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         # 支持账号密码进行认证
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication'
